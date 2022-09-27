@@ -1,7 +1,7 @@
 # Colour Balancing
 import cv2
-import numpy as np
 import matplotlib
+import numpy as np
 from matplotlib import pyplot as plt
 
 matplotlib.use('TkAgg')
@@ -52,7 +52,6 @@ show_two_imgs(img, balanced)
 # assumes that in a normal well color balanced photo, the average of all the colors is a neutral gray
 # compute mean values for all three colour channels
 mean_rgb = np.mean(img, axis = (0, 1))
-
 # calculate coefficients for every channel
 kr = np.max(mean_rgb) / mean_rgb[0]
 kg = np.max(mean_rgb) / mean_rgb[1]
@@ -63,7 +62,9 @@ balanced = apply(img, coeffs)
 show_two_imgs(img, balanced)
 
 # Scale-by-max
+# increases levels of colours so that the brightest value of each channel becomes 255
 # compute maximum values for all three colour channels
 max_rgb = np.max(img, axis = (0, 1))
-balanced = apply(img, max_rgb)
+coef_rgb = 255 / max_rgb
+balanced = apply(img, coef_rgb)
 show_two_imgs(img, balanced)
