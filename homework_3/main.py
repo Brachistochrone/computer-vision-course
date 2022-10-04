@@ -31,8 +31,6 @@ show_two_imgs(img, blurred)
 
 # delete everything from original image, leave only sharp edges
 diff = img - blurred
-diff[diff < 0] = 0
-diff[diff > 1] = 1
 show_two_imgs(img, diff)
 
 # apply USM
