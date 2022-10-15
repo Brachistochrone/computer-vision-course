@@ -1,8 +1,6 @@
 import cv2
-import math
 import matplotlib
 import numpy as np
-from sklearn.cluster import KMeans
 from matplotlib import pyplot as plt
 
 matplotlib.use('TkAgg')
@@ -25,8 +23,8 @@ def get_descriptor(target_quadrant, q2, q3, q4):
     return np.mean(target_quadrant) - np.mean(q2) - np.mean(q3) - np.mean(q4)
 
 
-def highlight_corner(image, corner_coordinates):
-    cv2.circle(image, corner_coordinates, 5, (255, 0, 0), -1)
+def highlight_corner(image, corner_coordinates, radius):
+    cv2.circle(image, corner_coordinates, radius, (255, 0, 0), -1)
 
 
 img = cv2.imread('resources/document.jpg')
@@ -88,11 +86,18 @@ for row in range(quad_size, rows - quad_size):
             bottom_right_corner = (column, row)
 
 out = np.copy(img)
-highlight_corner(out, top_left_corner)
-highlight_corner(out, top_right_corner)
-highlight_corner(out, bottom_left_corner)
-highlight_corner(out, bottom_right_corner)
+highlight_corner(out, top_left_corner, 5)
+highlight_corner(out, top_right_corner, 5)
+highlight_corner(out, bottom_left_corner, 5)
+highlight_corner(out, bottom_right_corner, 5)
 show_two_imgs(img, out, 'Original', 'Highlighted corners')
 
 # Answers:
-# -
+# - If an image was of higher resolution (e.g. 12Mpx), this algorithm most likely wouldn't work,
+#   because it would contain way more small details with sharp and contrast corners, such as letters,
+#   texture elements ans so on, that would cause our Harris detector to detect too many pixels with cornerness
+#   greater than that of paper corners, and we would end up with random result.
+# - To prevent this, a few steps could be taken:
+#   - a source picture could be scaled down to reduce its quality
+#   - Gaussian blurring could be applied to a picture to reduce high frequency noise
+#   - 'blockSize' and 'ksize' arguments of Harris detector could be increased
