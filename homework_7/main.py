@@ -74,16 +74,32 @@ out = np.copy(img)
 highlight_corners(out, (top_left_corner, top_right_corner, bottom_left_corner, bottom_right_corner), 5)
 show_two_imgs(img, out, 'Original', 'Highlighted corners')
 
-# define the matrix of source points corresponding to 4 document corners
+# define the matrix of source points corresponding to 4 document corners (row x column)
 document_corners = (top_left_corner, top_right_corner, bottom_left_corner, bottom_right_corner)
 src = np.array(document_corners, dtype = np.float32)
-# define the matrix of target points corresponding to 4 image corners
-img_corners = ((0, 0), (0, columns - 1), (rows - 1, 0), (rows - 1, columns - 1))
+# define the matrix of target points corresponding to 4 image corners (column x row)
+img_corners = ((0, 0), (columns - 1, 0), (0, rows - 1), (columns - 1, rows - 1))
 dst = np.array(img_corners, dtype = np.float32)
 
-# compute the affine transform matrix that relates two images (requires coordinates of 3 points from both)
-# src = np.float32([[x[1], x[0]] for x in src])
-# dst = np.float32([[x[1], x[0]] for x in dst])
+# Document Rectification
+
+# Affine transform (does not help since it guarantees parallelism - not parallel lines stay not parallel)
+# compute the affine transform matrix that relates two images (requires coordinates of 3 points from both images)
+# using first 3 points
 M = cv2.getAffineTransform(src[:3], dst[:3])
 rectified = cv2.warpAffine(img, M, (columns, rows))
-show_two_imgs(img, rectified, 'Original', 'After Affine transform')
+show_two_imgs(img, rectified, 'Original', 'After Affine transform (first 3 points)')
+# using last 3 points
+M = cv2.getAffineTransform(src[1:4], dst[1:4])
+rectified = cv2.warpAffine(img, M, (columns, rows))
+show_two_imgs(img, rectified, 'Original', 'After Affine transform (last 3 points)')
+# using all 4 points
+M, inliers = cv2.estimateAffine2D(src, dst)
+rectified = cv2.warpAffine(img, M, (columns, rows))
+show_two_imgs(img, rectified, 'Original', 'After Affine transform (all 4 points)')
+
+# Homography estimation
+# compute homography matrix
+M = cv2.getPerspectiveTransform(src, dst)
+rectified = cv2.warpPerspective(src, M, (columns, rows), flags = cv2.INTER_LINEAR)
+show_two_imgs(img, rectified, 'Original', 'After Homography')
