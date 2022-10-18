@@ -101,5 +101,14 @@ show_two_imgs(img, rectified, 'Original', 'After Affine transform (all 4 points)
 # Homography estimation
 # compute homography matrix
 M = cv2.getPerspectiveTransform(src, dst)
-rectified = cv2.warpPerspective(src, M, (columns, rows), flags = cv2.INTER_LINEAR)
+rectified = cv2.warpPerspective(img, M, (columns, rows))
 show_two_imgs(img, rectified, 'Original', 'After Homography')
+
+# Answers:
+# - affine transform does not work in this example because it guarantees parallelism
+#   (when parallel lines stay parallel after transform and vice versa), and since vertical edges of our document are
+#   not parallel, they remain not parallel and don't fit in the frame
+# - the values of inliers are [[1], [1], [0], [1]] that corresponds to the corners of the document that coincide
+#   with the corners of the frame (0 - represents the corner that lies outside of the picture)
+# - the result after applying homography looks better because all four corners of the document fit into the picture
+#   since homography does not have to stick to parallelism and can change the perspective of the image
