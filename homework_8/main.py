@@ -63,3 +63,10 @@ for th in range(0, 256):
 
 print('Optimal threshold', opt_th)
 show_two_imgs(img_gray, img_gray > opt_th, 'Original', 'Optimal threshold', 'gray', 'gray')
+
+# Answers:
+# - based on the histogram, I wouldn't say that the picture has bimodal distribution because
+#   even though there is a distinct cluster of bright pixels, but there is no distinct cluster of dark pixels
+#   and dark pixels are more or less evenly distributed
+# - I would pick 175..177 as an optimal threshold because it's where the slope of bright pixel cluster begins to rise
+# - resulting text binarization is not good enough since white letters are barely seen
