@@ -27,12 +27,39 @@ def plot_histogram(h):
 
 
 img = cv2.imread('resources/document.jpg')
-img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img_gray = np.array(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
 show_img(img_gray, 'Source image (gray)', 'gray')
 
 # build histogram
-h = np.histogram(img, bins = 256, range = (0, 255))
+h = np.histogram(img_gray, bins = 256, range = (0, 255))
 plot_histogram(h)
 
 # Otsu Thresholding
-# TODO finish
+rows, columns = img_gray.shape
+num_pixels = rows * columns
+# Best within-class variance (wcv)
+best_wcv = 1e6
+# Threshold corresponding to the best wcv
+opt_th = None
+# Brute force search using all possible thresholds
+for th in range(0, 256):
+    # get foreground pixels
+    foreground = img_gray[img_gray > th]
+    # get background pixels
+    background = img_gray[img_gray <= th]
+    if len(foreground) == 0 or len(background) == 0:
+        continue
+    # compute class-weights (omega parameters) for foreground and background
+    omega_f = len(foreground) / num_pixels
+    omega_b = 1 - omega_f
+    # compute pixel variance for foreground and background (result ^2 already)
+    sigma_f = np.var(foreground)
+    sigma_b = np.var(background)
+    # compute within-class variance
+    wcv = np.sqrt(omega_f * sigma_f + omega_b * sigma_b)
+    if wcv < best_wcv:
+        best_wcv = wcv
+        opt_th = th
+
+print('Optimal threshold', opt_th)
+show_two_imgs(img_gray, img_gray > opt_th, 'Original', 'Optimal threshold', 'gray', 'gray')
