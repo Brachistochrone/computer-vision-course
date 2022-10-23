@@ -18,4 +18,21 @@ def show_two_imgs(img1, img2, title1 = '', title2 = '', cmap1 = None, cmap2 = No
     plt.subplot(122), plt.title(title2), plt.imshow(img2, cmap = cmap2)
     plt.show()
 
-# TODO finish homework
+
+def plot_histogram(h):
+    plt.bar(h[1][0:-1], h[0])
+    plt.xlabel('Colour'), plt.ylabel('Count')
+    plt.grid(True)
+    plt.show()
+
+
+img = cv2.imread('resources/document.jpg')
+img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+show_img(img_gray, 'Source image (gray)', 'gray')
+
+# build histogram
+h = np.histogram(img, bins = 256, range = (0, 255))
+plot_histogram(h)
+
+# Otsu Thresholding
+# TODO finish
