@@ -63,7 +63,7 @@ cv2.destroyAllWindows()
 #   - very slow (the slowest among three)
 #   - cannot adjust the bounding box if object's scale changes
 #   - keeps tracking random objects when the main object goes off the screen
-#  CSRT:
+# CSRT:
 #   Advantages:
 #   - keeps tracking an object if perspective changes
 #   - keeps tracking an object if it changes its size
@@ -73,7 +73,7 @@ cv2.destroyAllWindows()
 #   Disadvantages:
 #   - quite slow (but faster than MIL)
 #   - fails to adjust the bounding box if object's scale changes too rapidly
-#   MOSSE:
+# MOSSE:
 #   Advantages:
 #   - very fast
 #   - keeps tracking an object if perspective changes
