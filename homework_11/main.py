@@ -123,3 +123,11 @@ print(network.summary())
 history = network.fit(inputs_train, outputs_train, validation_data = (inputs_test, outputs_test), epochs = 150,
                       batch_size = 32, verbose = 0)
 plot_history(history, 1e5, 'Network with more layers')
+
+# Answers:
+# - improvements are not equally helpful
+# - adding one more input parameter doesn't make the network any better (actually the outcome becomes even worse)
+# - doubling the number of neurons in the intermediate layer shows the best result
+# - adding one more layer also slightly improves the network's outcome
+# - however, neither modification alone shows a drastic improvement in the network's performance;
+#   perhaps, to achieve the best results, all of them should be combined
