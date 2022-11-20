@@ -111,3 +111,13 @@ for ii in range(15):
     idx = np.random.randint(0, len(in_test))
     plt.subplot(3, 5, ii + 1), plt.imshow(in_test[idx, ...])
     plt.title('True: ' + str(classes[out_true[idx]]) + ' | Pred: ' + str(classes[out_pred[idx]]))
+plt.show()
+
+# Answers:
+# - the overall accuracy of the classifier is about 0.68
+# - in order to improve prediction accuracy, I would increase epoch number,
+#   since the history graphics show that the learning curves have not reached flat regions yet
+#   also, I guess using AlexNet architecture for this classifier would be beneficial too
+#   adding more layers to the current network does not help much
+# - increasing the number of epochs to 30 slightly improves the prediction accuracy,
+#   but the problem of over-fitting becomes more obvious
